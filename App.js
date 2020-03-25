@@ -13,6 +13,7 @@ import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 
 import UserContext from './context/UserContext';
+import ErrorContext from './context/ErrorContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { signOut, useAuthEffect } from './auth';
@@ -28,6 +29,7 @@ export default function App() {
   const [initializing, setInitializing] = useState(true);
   const userState = useState(null);
   const [user, setUser] = userState;
+  const errorState = useState({});
 
   function onAuthStateChanged(user) {
     setUser(user);
@@ -41,18 +43,20 @@ export default function App() {
     return null;
   }
 
-  if (!user) {
-    return <Login />;
-  }
-
-  console.log(user);
-
   return (
     <View style={styles.container}>
       <UserContext.Provider value={userState}>
-        <Text style={styles.welcome}>Welcome, {user.email}</Text>
-        <Text style={styles.welcome}>Party Rental</Text>
-        <Button title="Sign Out" onPress={signOut} />
+        <ErrorContext.Provider value={errorState}>
+          {user ? (
+            <>
+              <Text style={styles.welcome}>Welcome, {user.email}</Text>
+              <Text style={styles.welcome}>Party Rental</Text>
+              <Button title="Sign Out" onPress={signOut} />
+            </>
+          ) : (
+            <Login />
+          )}
+        </ErrorContext.Provider>
       </UserContext.Provider>
     </View>
   );
@@ -61,8 +65,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 20,
     backgroundColor: '#F5FCFF',
   },
   welcome: {

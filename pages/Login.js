@@ -1,11 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
+import ErrorContext from '../context/ErrorContext';
 import { signInWithEmailPassword } from '../auth';
 
 function Login() {
+  const [errors, setErrors] = useContext(ErrorContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    return setErrors({});
+  }, [setErrors]);
+
+  const onSignInClick = () => {
+    signInWithEmailPassword(email, password, setErrors);
+  };
 
   return (
     <View style={styles.container}>
@@ -26,13 +36,9 @@ function Login() {
           onChangeText={text => setPassword(text)}
           value={password}
         />
+        {errors && errors.auth && <Text>{errors.auth}</Text>}
       </View>
-      <Button
-        title="Login"
-        onPress={() => {
-          signInWithEmailPassword(email, password);
-        }}
-      />
+      <Button title="Sign In" onPress={onSignInClick} />
     </View>
   );
 }

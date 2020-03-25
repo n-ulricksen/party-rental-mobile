@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
+import ErrorContext from '../context/ErrorContext';
 import { registerUser } from '../auth';
 
 function Register() {
+  const [errors, setErrors] = useContext(ErrorContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
+
+  useEffect(() => {
+    return setErrors({});
+  }, [setErrors]);
+
+  const onRegisterClick = () => {
+    registerUser(email, password, password2, setErrors);
+  };
 
   return (
     <View style={styles.container}>
@@ -26,16 +37,17 @@ function Register() {
           onChangeText={text => setPassword(text)}
           value={password}
         />
-        {/* <Text style={styles.inputLabel}>Repeat Password:</Text>
+        <Text style={styles.inputLabel}>Repeat Password:</Text>
         <TextInput
           style={styles.textInput}
           type="password"
           secureTextEntry
-          onChangeText={text => setPassword(text)}
-          value={password}
-        /> */}
+          onChangeText={text => setPassword2(text)}
+          value={password2}
+        />
+        {errors && errors.auth && <Text>{errors.auth}</Text>}
       </View>
-      <Button title="Register" onPress={() => registerUser(email, password)} />
+      <Button title="Register" onPress={onRegisterClick} />
     </View>
   );
 }
@@ -43,7 +55,6 @@ function Register() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     justifyContent: 'center',
   },
   header: {
