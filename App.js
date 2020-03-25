@@ -6,10 +6,16 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect, Component } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
 import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+
+import UserContext from './context/UserContext';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import { signOut, useAuthEffect } from './auth';
 
 // TODO(you): import any additional firebase services that you require for your app, e.g for auth:
 //    1) install the npm package: `yarn add @react-native-firebase/auth@alpha` - you do not need to
@@ -18,33 +24,38 @@ import firebase from '@react-native-firebase/app';
 //    3) import the package here in your JavaScript code: `import '@react-native-firebase/auth';`
 //    4) The Firebase Auth service is now available to use here: `firebase.auth().currentUser`
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\nCmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\nShake or press menu button for dev menu',
-});
+export default function App() {
+  const [initializing, setInitializing] = useState(true);
+  const userState = useState(null);
+  const [user, setUser] = userState;
 
-const firebaseCredentials = Platform.select({
-  ios: 'https://invertase.link/firebase-ios',
-  android: 'https://invertase.link/firebase-android',
-});
-
-type Props = {};
-
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native + Firebase!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        {!firebase.apps.length && (
-          <Text style={styles.instructions}>
-            {`\nYou currently have no Firebase apps registered, this most likely means you've not downloaded your project credentials. Visit the link below to learn more. \n\n ${firebaseCredentials}`}
-          </Text>
-        )}
-      </View>
-    );
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) {
+      setInitializing(false);
+    }
   }
+  useAuthEffect(onAuthStateChanged);
+
+  if (initializing) {
+    return null;
+  }
+
+  if (!user) {
+    return <Login />;
+  }
+
+  console.log(user);
+
+  return (
+    <View style={styles.container}>
+      <UserContext.Provider value={userState}>
+        <Text style={styles.welcome}>Welcome, {user.email}</Text>
+        <Text style={styles.welcome}>Party Rental</Text>
+        <Button title="Sign Out" onPress={signOut} />
+      </UserContext.Provider>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -58,10 +69,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
