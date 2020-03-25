@@ -15,7 +15,8 @@ function Register() {
   }, [setErrors]);
 
   const onRegisterClick = () => {
-    registerUser(email, password, password2, setErrors);
+    let newUser = { email, password, password2 };
+    registerUser(newUser, setErrors);
   };
 
   return (

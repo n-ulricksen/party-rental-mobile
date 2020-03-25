@@ -1,4 +1,5 @@
-export function validateRegistration(email, password, password2) {
+export function validateRegistration(user) {
+  const { email, password, password2 } = user;
   let errorMessage = '';
 
   if (!email || !password || !password2) {
@@ -10,7 +11,8 @@ export function validateRegistration(email, password, password2) {
   return errorMessage;
 }
 
-export function validateLogin(email, password) {
+export function validateLogin(user) {
+  const { email, password } = user;
   let errorMessage = '';
 
   if (!email || !password) {

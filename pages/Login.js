@@ -14,7 +14,8 @@ function Login() {
   }, [setErrors]);
 
   const onSignInClick = () => {
-    signInWithEmailPassword(email, password, setErrors);
+    let user = { email, password };
+    signInWithEmailPassword(user, setErrors);
   };
 
   return (

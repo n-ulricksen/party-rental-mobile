@@ -11,12 +11,14 @@ export function useAuthEffect(onAuthStateChanged) {
   });
 }
 
-export function registerUser(email, password, password2, setErrors) {
-  let errorMessage = validateRegistration(email, password, password2);
+export function registerUser(user, setErrors) {
+  let errorMessage = validateRegistration(user);
   if (errorMessage) {
     setErrors({ auth: errorMessage });
     return;
   }
+
+  const { email, password } = user;
 
   auth()
     .createUserWithEmailAndPassword(email, password)
@@ -44,12 +46,14 @@ export function registerUser(email, password, password2, setErrors) {
     });
 }
 
-export function signInWithEmailPassword(email, password, setErrors) {
-  let errorMessage = validateLogin(email, password);
+export function signInWithEmailPassword(user, setErrors) {
+  let errorMessage = validateLogin(user);
   if (errorMessage) {
     setErrors({ auth: errorMessage });
     return;
   }
+
+  const { email, password } = user;
 
   auth()
     .signInWithEmailAndPassword(email, password)
