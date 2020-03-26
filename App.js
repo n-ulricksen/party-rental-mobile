@@ -16,7 +16,9 @@ import UserContext from './context/UserContext';
 import ErrorContext from './context/ErrorContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import { signOut, useAuthEffect } from './auth';
+import Dashboard from './pages/Dashboard';
+import RegisterUserInfo from './pages/RegisterUserInfo';
+import { useAuthEffect } from './auth';
 
 // TODO(you): import any additional firebase services that you require for your app, e.g for auth:
 //    1) install the npm package: `yarn add @react-native-firebase/auth@alpha` - you do not need to
@@ -47,15 +49,9 @@ export default function App() {
     <View style={styles.container}>
       <UserContext.Provider value={userState}>
         <ErrorContext.Provider value={errorState}>
-          {user ? (
-            <>
-              <Text style={styles.welcome}>Welcome, {user.email}</Text>
-              <Text style={styles.welcome}>Party Rental</Text>
-              <Button title="Sign Out" onPress={signOut} />
-            </>
-          ) : (
-            <Login />
-          )}
+          {!user && <Login />}
+          {!user && !user.displayName && <RegisterUserInfo />}
+          {user && user.displayName && <RegisterUserInfo />}
         </ErrorContext.Provider>
       </UserContext.Provider>
     </View>
