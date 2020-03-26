@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import ErrorContext from '../context/ErrorContext';
 import { signInWithEmailPassword } from '../auth';
 
-function Login() {
+function Login({ navigation }) {
   const [errors, setErrors] = useContext(ErrorContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,9 +13,9 @@ function Login() {
     return setErrors({});
   }, [setErrors]);
 
-  const onSignInClick = () => {
-    let user = { email, password };
-    signInWithEmailPassword(user, setErrors);
+  const onSignInClick = async () => {
+    const userCreds = { email, password };
+    await signInWithEmailPassword(userCreds, setErrors);
   };
 
   return (
@@ -41,6 +41,14 @@ function Login() {
         {errors && errors.auth && <Text>{errors.auth}</Text>}
       </View>
       <Button title="Sign In" onPress={onSignInClick} />
+      <View style={{ paddingVertical: 5 }} />
+      <Button
+        title="Register"
+        onPress={() => {
+          console.log('register');
+          navigation.navigate('Register');
+        }}
+      />
     </View>
   );
 }

@@ -3,11 +3,11 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
 import ErrorContext from '../context/ErrorContext';
 import UserContext from '../context/UserContext';
-import { createUserProfile } from '../firestore/user';
+import { editUserProfile, getUserProfile } from '../firestore/user';
 
-function RegisterUserInfo() {
+function RegisterUserInfo({ navigation }) {
   const [errors, setErrors] = useContext(ErrorContext);
-  const [user] = useContext(UserContext);
+  const [user, setUser] = useContext(UserContext);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -16,15 +16,25 @@ function RegisterUserInfo() {
     return setErrors({});
   }, [setErrors]);
 
+  useEffect(() => {
+    getUserProfile(user.uid).then(userProfile => {
+      if (userProfile.exists) {
+        const profile = userProfile.data();
+        setFirstName(profile.firstName);
+        setLastName(profile.lastName);
+        setPhoneNumber(profile.phoneNumber);
+      }
+    });
+  }, [user, setUser]);
+
   const onSubmit = () => {
     let userProfile = {
-      uid: user.uid,
       firstName,
       lastName,
       phoneNumber,
     };
-    createUserProfile(userProfile)
-      .then(() => console.log('user profile created'))
+    editUserProfile(user.uid, userProfile)
+      .then(() => navigation.navigate('Home'))
       .catch(err => setErrors({ input: err.message }));
   };
 
@@ -64,6 +74,7 @@ function RegisterUserInfo() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 20,
     justifyContent: 'center',
   },
   header: {

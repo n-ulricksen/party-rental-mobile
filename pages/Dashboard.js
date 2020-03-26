@@ -5,10 +5,10 @@ import firestore from '@react-native-firebase/firestore';
 import UserContext from '../context/UserContext';
 import { signOut } from '../auth';
 
-export default function Dashboard() {
+export default function Dashboard({ navigation }) {
   const [user] = useContext(UserContext);
 
-  const addData = () => {
+  const printUserProfile = () => {
     // firestore()
     //   .collection('users')
     //   .add({
@@ -28,10 +28,20 @@ export default function Dashboard() {
   };
 
   return (
-    <View>
-      <Text style={styles.welcome}>Welcome, {user.email}</Text>
-      <Button title="Print user profile" onPress={addData} />
-      <Button title="Sign Out" onPress={signOut} />
+    <View style={styles.container}>
+      {user ? (
+        <>
+          <Text style={styles.welcome}>Welcome, {user.email}</Text>
+          <Button title="Print user profile" onPress={printUserProfile} />
+          <View style={{ paddingVertical: 5 }} />
+          <Button
+            title="Edit profile"
+            onPress={() => navigation.navigate('Update Info')}
+          />
+          <View style={{ paddingVertical: 5 }} />
+          <Button title="Sign Out" onPress={signOut} />
+        </>
+      ) : null}
     </View>
   );
 }
@@ -39,6 +49,7 @@ export default function Dashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
   },
   welcome: {
     fontSize: 20,

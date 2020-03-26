@@ -46,7 +46,7 @@ export function registerUser(user, setErrors) {
     });
 }
 
-export function signInWithEmailPassword(user, setErrors) {
+export async function signInWithEmailPassword(user, setErrors) {
   let errorMessage = validateLogin(user);
   if (errorMessage) {
     setErrors({ auth: errorMessage });
@@ -55,7 +55,7 @@ export function signInWithEmailPassword(user, setErrors) {
 
   const { email, password } = user;
 
-  auth()
+  return auth()
     .signInWithEmailAndPassword(email, password)
     .catch(function(error) {
       const errorCode = error.code;
@@ -85,5 +85,5 @@ export function signInWithEmailPassword(user, setErrors) {
 }
 
 export async function signOut() {
-  await auth().signOut();
+  return auth().signOut();
 }

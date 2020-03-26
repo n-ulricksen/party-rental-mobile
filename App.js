@@ -6,9 +6,12 @@
  * @flow
  */
 
+import 'react-native-gesture-handler';
 import React, { useState, useEffect, Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 
@@ -20,12 +23,8 @@ import Dashboard from './pages/Dashboard';
 import RegisterUserInfo from './pages/RegisterUserInfo';
 import { useAuthEffect } from './auth';
 
-// TODO(you): import any additional firebase services that you require for your app, e.g for auth:
-//    1) install the npm package: `yarn add @react-native-firebase/auth@alpha` - you do not need to
-//       run linking commands - this happens automatically at build time now
-//    2) rebuild your app via `yarn run run:android` or `yarn run run:ios`
-//    3) import the package here in your JavaScript code: `import '@react-native-firebase/auth';`
-//    4) The Firebase Auth service is now available to use here: `firebase.auth().currentUser`
+// Navigation
+const Stack = createStackNavigator();
 
 export default function App() {
   const [initializing, setInitializing] = useState(true);
@@ -46,15 +45,25 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <UserContext.Provider value={userState}>
-        <ErrorContext.Provider value={errorState}>
-          {!user && <Login />}
-          {!user && !user.displayName && <RegisterUserInfo />}
-          {user && user.displayName && <RegisterUserInfo />}
-        </ErrorContext.Provider>
-      </UserContext.Provider>
-    </View>
+    <UserContext.Provider value={userState}>
+      <ErrorContext.Provider value={errorState}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {user ? (
+              <>
+                <Stack.Screen name="Home" component={Dashboard} />
+                <Stack.Screen name="Update Info" component={RegisterUserInfo} />
+              </>
+            ) : (
+              <>
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Register" component={Register} />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ErrorContext.Provider>
+    </UserContext.Provider>
   );
 }
 

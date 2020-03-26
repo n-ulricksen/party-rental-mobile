@@ -4,7 +4,7 @@ import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import ErrorContext from '../context/ErrorContext';
 import { registerUser } from '../auth';
 
-function Register() {
+function Register({ navigation }) {
   const [errors, setErrors] = useContext(ErrorContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,6 +50,11 @@ function Register() {
         {errors && errors.auth && <Text>{errors.auth}</Text>}
       </View>
       <Button title="Register" onPress={onRegisterClick} />
+      <View style={{ paddingVertical: 5 }} />
+      <Button
+        title="Already registered?"
+        onPress={() => navigation.navigate('Login')}
+      />
     </View>
   );
 }
