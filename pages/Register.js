@@ -27,6 +27,7 @@ function Register() {
         <TextInput
           style={styles.textInput}
           textContentType="emailAddress"
+          keyboardType="email-address"
           onChangeText={text => setEmail(text)}
           value={email}
         />
