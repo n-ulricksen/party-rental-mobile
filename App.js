@@ -15,13 +15,14 @@ import { createStackNavigator } from '@react-navigation/stack';
 import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 
+import { useAuthEffect } from './auth';
 import UserContext from './context/UserContext';
 import ErrorContext from './context/ErrorContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import RegisterUserInfo from './pages/RegisterUserInfo';
-import { useAuthEffect } from './auth';
+import AddProduct from './pages/AddProduct';
 
 // Navigation
 const Stack = createStackNavigator();
@@ -53,6 +54,7 @@ export default function App() {
               <>
                 <Stack.Screen name="Home" component={Dashboard} />
                 <Stack.Screen name="Update Info" component={RegisterUserInfo} />
+                <Stack.Screen name="Add Product" component={AddProduct} />
               </>
             ) : (
               <>

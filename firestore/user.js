@@ -8,13 +8,10 @@ export async function editUserProfile(uid, profile) {
     throw new Error(errorMessage);
   }
 
-  const { firstName, lastName, phoneNumber } = profile;
-  const userProfile = { firstName, lastName, phoneNumber };
-
   return firestore()
     .collection('users')
     .doc(uid)
-    .set(userProfile);
+    .set(profile);
 }
 
 export async function getUserProfile(uid) {

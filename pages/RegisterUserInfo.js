@@ -8,6 +8,7 @@ import { editUserProfile, getUserProfile } from '../firestore/user';
 function RegisterUserInfo({ navigation }) {
   const [errors, setErrors] = useContext(ErrorContext);
   const [user, setUser] = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -23,6 +24,7 @@ function RegisterUserInfo({ navigation }) {
         setFirstName(profile.firstName);
         setLastName(profile.lastName);
         setPhoneNumber(profile.phoneNumber);
+        setLoading(false);
       }
     });
   }, [user, setUser]);
@@ -37,6 +39,10 @@ function RegisterUserInfo({ navigation }) {
       .then(() => navigation.navigate('Home'))
       .catch(err => setErrors({ input: err.message }));
   };
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>

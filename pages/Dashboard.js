@@ -39,6 +39,11 @@ export default function Dashboard({ navigation }) {
             onPress={() => navigation.navigate('Update Info')}
           />
           <View style={{ paddingVertical: 5 }} />
+          <Button
+            title="Add Product"
+            onPress={() => navigation.navigate('Add Product')}
+          />
+          <View style={{ paddingVertical: 5 }} />
           <Button title="Sign Out" onPress={signOut} />
         </>
       ) : null}
