@@ -23,6 +23,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import RegisterUserInfo from './pages/RegisterUserInfo';
 import AddProduct from './pages/AddProduct';
+import ProductList from './pages/ProductList';
 
 // Navigation
 const Stack = createStackNavigator();
@@ -55,6 +56,7 @@ export default function App() {
                 <Stack.Screen name="Home" component={Dashboard} />
                 <Stack.Screen name="Update Info" component={RegisterUserInfo} />
                 <Stack.Screen name="Add Product" component={AddProduct} />
+                <Stack.Screen name="View Products" component={ProductList} />
               </>
             ) : (
               <>
@@ -68,16 +70,3 @@ export default function App() {
     </UserContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-});

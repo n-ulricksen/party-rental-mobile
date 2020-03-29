@@ -25,12 +25,11 @@ export async function pickImageFromDevice() {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        // const source = { uri: response.uri };
-
         // You can also display the image using data:
         const source = {
           name: new Date().getTime(),
-          uri: 'data:image/jpeg;base64,' + response.data,
+          // uri: 'data:image/jpeg;base64,' + response.data,
+          uri: response.uri,
         };
 
         resolve(source);

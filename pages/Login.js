@@ -45,7 +45,6 @@ function Login({ navigation }) {
       <Button
         title="Register"
         onPress={() => {
-          console.log('register');
           navigation.navigate('Register');
         }}
       />

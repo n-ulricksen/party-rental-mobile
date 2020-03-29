@@ -1,28 +1,14 @@
 import React, { useContext } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 
 import UserContext from '../context/UserContext';
 import { signOut } from '../auth';
+import { addTestProducts } from '../firestore/product';
 
 export default function Dashboard({ navigation }) {
   const [user] = useContext(UserContext);
 
   const printUserProfile = () => {
-    // firestore()
-    //   .collection('users')
-    //   .add({
-    //     first: 'Ada',
-    //     last: 'Lovelace',
-    //     born: 1815,
-    //   })
-    //   .then(function(docRef) {
-    //     console.log('Document written with ID: ', docRef.id);
-    //     console.log(docRef);
-    //   })
-    //   .catch(function(error) {
-    //     console.error('Error adding document: ', error);
-    //   });
     const { uid } = user;
     console.log(uid, user);
   };
@@ -43,6 +29,13 @@ export default function Dashboard({ navigation }) {
             title="Add Product"
             onPress={() => navigation.navigate('Add Product')}
           />
+          <View style={{ paddingVertical: 5 }} />
+          <Button
+            title="View Products"
+            onPress={() => navigation.navigate('View Products')}
+          />
+          <View style={{ paddingVertical: 5 }} />
+          <Button title="Add Test Products" onPress={addTestProducts} />
           <View style={{ paddingVertical: 5 }} />
           <Button title="Sign Out" onPress={signOut} />
         </>

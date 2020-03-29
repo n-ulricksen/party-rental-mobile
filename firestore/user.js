@@ -15,7 +15,6 @@ export async function editUserProfile(uid, profile) {
 }
 
 export async function getUserProfile(uid) {
-  console.log(uid);
   const userRef = firestore()
     .collection('users')
     .doc(uid);

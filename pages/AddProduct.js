@@ -1,11 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Image,
+  ImageStore,
+} from 'react-native';
 
 import ErrorContext from '../context/ErrorContext';
 import UserContext from '../context/UserContext';
 import { addProduct } from '../firestore/product';
 import { pickImageFromDevice } from '../util/pickImage';
-import { uploadImage } from '../storage/image';
+import { uploadProductImage } from '../storage/image';
 
 function AddProduct({ navigation }) {
   const [errors, setErrors] = useContext(ErrorContext);
@@ -34,14 +42,18 @@ function AddProduct({ navigation }) {
   const onSelectImage = async () => {
     try {
       const imgSource = await pickImageFromDevice();
+      imgSource.uri = decodeURI(imgSource.uri);
       setImage(imgSource);
+      // console.log(imgSource.uri);
 
-      const url = await uploadImage(imgSource);
+      const url = await uploadProductImage(imgSource);
+      // console.log(url);
       setImageUrl(url);
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(imageUrl);
 
   return (
     <View style={styles.container}>
@@ -95,8 +107,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   image: {
-    minWidth: 200,
-    height: 200,
+    minHeight: 240,
+    resizeMode: 'contain',
   },
 });
 
